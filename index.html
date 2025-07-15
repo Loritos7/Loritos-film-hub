@@ -82,7 +82,28 @@
         try {
           localStorage.setItem(key, JSON.stringify(value));
           return true;
-        } catch (e) {
+        } catch (// Função de filtro (implementação exemplo)
+function filterMovies(movies, filters) {
+  if (!movies || !filters?.search) return movies;
+  return movies.filter(movie => 
+    movie.title.toLowerCase().includes(filters.search.toLowerCase())
+  );
+}
+
+// Teste com Jest (ou console.assert)
+function testFilterMovies() {
+  const testMovies = [{ title: 'Test', year: '2020', genre: 'Action' }];
+  const filtered = filterMovies(testMovies, { search: 'test' });
+  console.assert(filtered.length === 1, 'Filtro por busca falhou');
+  if (filtered.length === 1) {
+    console.log('✅ Teste passou!');
+  } else {
+    console.error('❌ Teste falhou!');
+  }
+}
+
+// Executar teste
+testFilterMovies();) {
           console.error('Erro ao salvar no localStorage', e);
           return false;
         }
