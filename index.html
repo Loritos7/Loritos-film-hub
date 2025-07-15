@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lorito's Film Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://example.com/path/to/background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    
+    /* Restante do CSS permanece igual */
+  </style>
+</head>
+<body>
+  <!-- Conteúdo HTML permanece igual -->
+
+  <script>
+    // Mover as declarações de funções para o topo
+    function performSearch() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      currentFilters.search = searchTerm;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      currentFilters.year = document.getElementById('yearFilter').value;
+      currentFilters.tag = document.getElementById('tagFilter').value;
+      currentFilters.duration = document.getElementById('durationFilter').value;
+      
+      loadMovies();
+      updateResultsInfo();
+    }
+
+    // Adicionar validação robusta para formulários
+    function validateForm(formData) {
+      const errors = [];
+      
+      if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
+        errors.push('Email inválido');
+      }
+      
+      if (!formData.password || formData.password.length < 6) {
+        errors.push('Senha deve ter pelo menos 6 caracteres');
+      }
+      
+      if (!isLoginMode && (!formData.name || formData.name.length < 3)) {
+        errors.push('Nome deve ter pelo menos 3 caracteres');
+      }
+      
+      return errors.length ? errors : null;
+    }
+
+    // Otimizar acesso ao localStorage
+    const storage = {
+      get: (key) => {
+        try {
+          return JSON.parse(localStorage.getItem(key));
+        } catch (e) {
+          console.error('Erro ao ler do localStorage', e);
+          return null;
+        }
+      },
+      set: (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (e) {
+          console.error('Erro ao salvar no localStorage', e);
+          return false;
+        }
+      }
+    };
+
+    // Restante do código JavaScript permanece igual
+    // Garantir que todas as funções sejam definidas antes de serem chamadas
+
+    // Inicialização correta
+    document.addEventListener('DOMContentLoaded', function() {
+      // Carregar usuário
+      currentUser = storage.get('currentUser');
+      
+      if (currentUser) {
+        updateAuthUI();
+      }
+      
+      // Configurar eventos
+      setupEventListeners();
+      
+      // Carregar dados
+      loadInitialData();
+    });
+
+    function setupEventListeners() {
+      // Configurar todos os event listeners aqui
+      document.getElementById('authForm').addEventListener('submit', handleAuthSubmit);
+      document.getElementById('searchInput').addEventListener('input', handleSearchInput);
+      // Adicionar outros listeners necessários
+    }
+
+    function loadInitialData() {
+      // Carregar dados iniciais
+      loadSavedData();
+      loadMovies();
+      loadSeries();
+      loadTrailers();
+    }
+
+    // Restante das funções permanece igual
+  </script>
+</body>
+</html> try {
+  // código que pode gerar erro
+} catch (error) {
+  console.error('Erro:', error);
+  showErrorToUser('Ocorreu um erro. Por favor, tente novamente.');
+} // Exemplo de teste simples
+function testFilterMovies() {
+  const testMovies = [{title: 'Test', year: '2020', genre: 'Action'}];
+  const filtered = filterMovies(testMovies, {search: 'test'});
+  console.assert(filtered.length === 1, 'Filtro por busca falhou');
+}
