@@ -1,168 +1,236 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lorito's Film Hub</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://example.com/path/to/background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-    }
-    
-    /* Restante do CSS permanece igual */
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorito's Film Hub | Acervo de Filmes</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        
+        header {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        h1 {
+            color: #ff6b00;
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .movie-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            padding: 1rem;
+        }
+        
+        .error-message {
+            color: #ff4444;
+            padding: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        #search-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+        }
+        
+        #search-button {
+            padding: 10px 20px;
+            background-color: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Conteúdo HTML permanece igual -->
+    <header>
+        <h1>Lorito's Film Hub</h1>
+        <p>Seu acervo pessoal de filmes</p>
+    </header>
+    
+    <div class="container">
+        <div id="error-message" class="error-message"></div>
+        
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Buscar filmes por título...">
+            <button id="search-button">Buscar</button>
+        </div>
+        
+        <div class="movie-grid" id="movie-container">
+            <!-- Os filmes serão carregados aqui via JavaScript -->
+        </div>
+    </div>
+    
+    <script>
+        // DADOS MOCKADOS (filmes de exemplo)
+        const mockMovies = [
+            { 
+                title: 'O Poderoso Chefão', 
+                year: 1972, 
+                genre: 'Drama', 
+                poster: 'https://via.placeholder.com/300x450?text=O+Poderoso+Chefão' 
+            },
+            { 
+                title: 'O Senhor dos Anéis', 
+                year: 2001, 
+                genre: 'Fantasia', 
+                poster: 'https://via.placeholder.com/300x450?text=O+Senhor+dos+Anéis' 
+            },
+            { 
+                title: 'Interestelar', 
+                year: 2014, 
+                genre: 'Ficção Científica', 
+                poster: 'https://via.placeholder.com/300x450?text=Interestelar' 
+            },
+            { 
+                title: 'Clube da Luta', 
+                year: 1999, 
+                genre: 'Drama', 
+                poster: 'https://via.placeholder.com/300x450?text=Clube+da+Luta' 
+            },
+            { 
+                title: 'Pulp Fiction', 
+                year: 1994, 
+                genre: 'Crime', 
+                poster: 'https://via.placeholder.com/300x450?text=Pulp+Fiction' 
+            }
+        ];
 
-  <script>
-    // Mover as declarações de funções para o topo
-    function performSearch() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      currentFilters.search = searchTerm;
-      applyFilters();
-    }
-
-    function applyFilters() {
-      currentFilters.year = document.getElementById('yearFilter').value;
-      currentFilters.tag = document.getElementById('tagFilter').value;
-      currentFilters.duration = document.getElementById('durationFilter').value;
-      
-      loadMovies();
-      updateResultsInfo();
-    }
-
-    // Adicionar validação robusta para formulários
-    function validateForm(formData) {
-      const errors = [];
-      
-      if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
-        errors.push('Email inválido');
-      }
-      
-      if (!formData.password || formData.password.length < 6) {
-        errors.push('Senha deve ter pelo menos 6 caracteres');
-      }
-      
-      if (!isLoginMode && (!formData.name || formData.name.length < 3)) {
-        errors.push('Nome deve ter pelo menos 3 caracteres');
-      }
-      
-      return errors.length ? errors : null;
-    }
-
-    // Otimizar acesso ao localStorage
-    const storage = {
-      get: (key) => {
-        try {
-          return JSON.parse(localStorage.getItem(key));
-        } catch (e) {
-          console.error('Erro ao ler do localStorage', e);
-          return null;
+        // Função para exibir filmes
+        function displayMovies(movies) {
+            const container = document.getElementById('movie-container');
+            container.innerHTML = '';
+            
+            if (!movies || movies.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Nenhum filme encontrado.</p>';
+                return;
+            }
+            
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+                movieCard.innerHTML = `
+                    <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3>${movie.title}</h3>
+                        <p>${movie.year} • ${movie.genre}</p>
+                    </div>
+                `;
+                container.appendChild(movieCard);
+            });
         }
-      },
-      set: (key, value) => {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-          return true;
-        } catch (// Função de filtro (implementação exemplo)
-function filterMovies(movies, filters) {
-  if (!movies || !filters?.search) return movies;
-  return movies.filter(movie => 
-    movie.title.toLowerCase().includes(filters.search.toLowerCase())
-  );
-}
 
-// Função de filtro (implementação exemplo)
-function filterMovies(movies, filters) {
-  if (!movies || !filters?.search) return movies;
-  return movies.filter(movie => 
-    movie.title.toLowerCase().includes(filters.search.toLowerCase())
-  );
-}
-
-// Teste com Jest (ou console.assert)
-function testFilterMovies() {
-  const testMovies = [{ title: 'Test', year: '2020', genre: 'Action' }];
-  const filtered = filterMovies(testMovies, { search: 'test' });
-  console.assert(filtered.length === 1, 'Filtro por busca falhou');
-  if (filtered.length === 1) {
-    console.log('✅ Teste passou!');
-  } else {
-    console.error('❌ Teste falhou!');
-  }
-}
-
-// Executar teste
-testFilterMovies(); {
-          console.error('Erro ao salvar no localStorage', e);
-          return false;
+        // Carrega os filmes mockados ao iniciar
+        function loadMovies() {
+            displayMovies(mockMovies);
         }
-      }
-    };
 
-    // Restante do código JavaScript permanece igual
-    // Garantir que todas as funções sejam definidas antes de serem chamadas
+        // Filtro de busca
+        function filterMovies(movies, filters) {
+            try {
+                if (!movies || !Array.isArray(movies)) {
+                    throw new Error('Lista de filmes inválida');
+                }
+                
+                return movies.filter(movie => {
+                    const matchesSearch = !filters.search || 
+                        movie.title.toLowerCase().includes(filters.search.toLowerCase());
+                    return matchesSearch;
+                });
+            } catch (error) {
+                console.error('Erro ao filtrar filmes:', error);
+                showErrorToUser('Erro ao filtrar filmes');
+                return [];
+            }
+        }
 
-    // Inicialização correta
-    document.addEventListener('DOMContentLoaded', function() {
-      // Carregar usuário
-      currentUser = storage.get('currentUser');
-      
-      if (currentUser) {
-        updateAuthUI();
-      }
-      
-      // Configurar eventos
-      setupEventListeners();
-      
-      // Carregar dados
-      loadInitialData();
-    });
+        // Função para exibir erros
+        function showErrorToUser(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
 
-    function setupEventListeners() {
-      // Configurar todos os event listeners aqui
-      document.getElementById('authForm').addEventListener('submit', handleAuthSubmit);
-      document.getElementById('searchInput').addEventListener('input', handleSearchInput);
-      // Adicionar outros listeners necessários
-    }
+        // Event listeners
+        document.getElementById('search-button').addEventListener('click', () => {
+            const searchTerm = document.getElementById('search-input').value;
+            const filtered = filterMovies(mockMovies, { search: searchTerm });
+            displayMovies(filtered);
+        });
 
-    function loadInitialData() {
-      // Carregar dados iniciais
-      loadSavedData();
-      loadMovies();
-      loadSeries();
-      loadTrailers();
-    }
+        // Permite buscar pressionando Enter
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('search-button').click();
+            }
+        });
 
-    // Restante das funções permanece igual
-  </script>
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', loadMovies);
+    </script>
 </body>
-</html> try {
-  // código que pode gerar erro
-} catch (error) {
-  console.error('Erro:', error);
-  showErrorToUser('Ocorreu um erro. Por favor, tente novamente.');
-} // Exemplo de teste simples
-function testFilterMovies() {
-  const testMovies = [{title: 'Test', year: '2020', genre: 'Action'}];
-  const filtered = filterMovies(testMovies, {search: 'test'});
-  console.assert(filtered.length === 1, 'Filtro por busca falhou');
-}
+</html>
