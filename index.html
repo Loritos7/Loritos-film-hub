@@ -90,6 +90,14 @@ function filterMovies(movies, filters) {
   );
 }
 
+// Função de filtro (implementação exemplo)
+function filterMovies(movies, filters) {
+  if (!movies || !filters?.search) return movies;
+  return movies.filter(movie => 
+    movie.title.toLowerCase().includes(filters.search.toLowerCase())
+  );
+}
+
 // Teste com Jest (ou console.assert)
 function testFilterMovies() {
   const testMovies = [{ title: 'Test', year: '2020', genre: 'Action' }];
@@ -103,7 +111,7 @@ function testFilterMovies() {
 }
 
 // Executar teste
-testFilterMovies();) {
+testFilterMovies(); {
           console.error('Erro ao salvar no localStorage', e);
           return false;
         }
