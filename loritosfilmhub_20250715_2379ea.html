@@ -184,13 +184,16 @@
             movies.forEach(movie => {
                 const movieCard = document.createElement('div');
                 movieCard.className = 'movie-card';
-                movieCard.innerHTML = `
-                    <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
-                    <div class="movie-info">
-                        <h3>${movie.title}</h3>
-                        <p>${movie.year} • ${movie.genre}</p>
-                    </div>
-                `;
+               card.innerHTML = `
+    <img src="${movie.poster}" 
+         alt="${movie.title}" 
+         class="movie-poster"
+         onerror="this.onerror=null;this.src='https://i.imgur.com/7I5qy9a.png'">
+    <div class="movie-info">
+        <h3>${movie.title}</h3>
+        <p>${movie.year} • ${movie.genre}</p>
+    </div>
+`;
                 container.appendChild(movieCard);
             });
         }
