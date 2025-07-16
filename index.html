@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+<head><meta name="theme-color" content="#ff9f1c">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lorito's Film Hub</title>
     <link rel="icon" href="data:,"> <!-- Elimina erro de favicon -->
-    <style>
+    <style>/* Barra de busca moderna */
+.search-container {
+    display: flex;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+#search-input {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    font-size: 1rem;
+    background: #2c2c2c;
+    color: white;
+}
+
+#search-button {
+    background: #ff9f1c;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#search-button:hover {
+    background: #ff8c00;
+}
+
+/* Melhorias nos cards */
+.movie-card {
+    background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -122,6 +164,28 @@
         window.addEventListener('DOMContentLoaded', () => {
             displayMovies(mockMovies);
         });
-    </script>
+    </script>// Função de busca atualizada (copie todo este bloco)
+function setupSearch() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+
+    const handleSearch = () => {
+        const term = searchInput.value.toLowerCase();
+        const filtered = mockMovies.filter(movie => 
+            movie.title.toLowerCase().includes(term) || 
+            movie.genre.toLowerCase().includes(term)
+        );
+        displayMovies(filtered);
+    };
+
+    searchButton.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keyup', (e) => e.key === 'Enter' && handleSearch());
+}
+
+// Inicialização
+window.addEventListener('DOMContentLoaded', () => {
+    displayMovies(mockMovies);
+    setupSearch();
+}); // Adicione esta linha
 </body>
 </html>
