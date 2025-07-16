@@ -30,3 +30,4 @@ body {
     object-fit: cover;
     background: #333; /* Cor de fallback */
 }
+
